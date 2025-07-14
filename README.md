@@ -5,7 +5,7 @@
 
 [Implement SRE in the enterprise](SREVisibilityPossibleImplStrategy.md)
 
-[How to define and implement Metics](SREMetrics.md)
+[How to define and implement Metrics](SREMetrics.md)
 
 [How to define and implement SLI](SLIMetrics.md)
 
@@ -13,14 +13,15 @@
 
 [About MTTR and MTBF](SREMTTR.md)
 
+[Popular Observability Frameworks](SREObservabilityFrameworks.md)
+
+
 ### Diagrams (mermaid)
 [SLO State Change Diagram](SLOStateChange.md)
 
 [SRE Common Diagrams](SRECommonDiagrams.md)
 
 [SLO Component Relationship](SLOComponentRelationship.md)
-
-[Observability Frameworks](SREObservabilityFrameworks.md)
 
 [Observability Framework Interactions](SREObservabilityFrameworkInteractions.md)
 
