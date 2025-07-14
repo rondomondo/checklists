@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>SREMetrics.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+
+.hide {
+    display: none;
+}
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.8.1/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="sre-metrics-implementation-guide">SRE Metrics Implementation Guide</h1>
+<h2 id="1-service-level-objectives-slo">1. Service Level Objectives (<a href="https://sre.google/sre-book/service-level-objectives/">SLO</a>)</h2>
+<h3 id="definition">Definition</h3>
+<p>An <a href="https://sre.google/sre-book/service-level-objectives/">SLO</a> is a target value or range for a service level that you want to achieve over a specified time window.</p>
+<h3 id="implementation-steps">Implementation Steps</h3>
+<ol>
+<li><input type="checkbox" id="checkbox0"><label for="checkbox0">Identify critical user journeys</label></li>
+<li><input type="checkbox" id="checkbox1"><label for="checkbox1">Define what &quot;good service&quot; means for each journey</label></li>
+<li><input type="checkbox" id="checkbox2"><label for="checkbox2">Choose appropriate metrics to measure</label></li>
+<li><input type="checkbox" id="checkbox3"><label for="checkbox3">Set realistic targets based on historical data</label></li>
+<li><input type="checkbox" id="checkbox4"><label for="checkbox4">Define measurement windows (e.g., 28 days rolling)</label></li>
+<li><input type="checkbox" id="checkbox5"><label for="checkbox5">Get stakeholder agreement</label></li>
+<li><input type="checkbox" id="checkbox6"><label for="checkbox6">Document and communicate</label></li>
+</ol>
+<h3 id="example-targets">Example Targets</h3>
+<ul>
+<li>Availability: 99.9% uptime</li>
+<li>Latency: 95% of requests &lt; 200ms</li>
+<li>Error rate: &lt; 0.1% of requests</li>
+<li>Durability: 99.999999% data retention</li>
+</ul>
+<h3 id="calculator">Calculator</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_slo_compliance</span><span class="hljs-params">(total_events, successful_events)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate SLO compliance percentage
+    
+    Parameters:
+    total_events (int): Total number of events/requests
+    successful_events (int): Number of successful events/requests
+    
+    Returns:
+    float: SLO compliance percentage
+    """</span>
+    <span class="hljs-keyword">if</span> total_events == <span class="hljs-number">0</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0.0</span>
+    
+    compliance = (successful_events / total_events) * <span class="hljs-number">100</span>
+    <span class="hljs-keyword">return</span> round(compliance, <span class="hljs-number">3</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">is_meeting_slo</span><span class="hljs-params">(current_compliance, slo_target)</span>:</span>
+    <span class="hljs-string">"""
+    Check if current compliance meets SLO target
+    
+    Parameters:
+    current_compliance (float): Current compliance percentage
+    slo_target (float): SLO target percentage
+    
+    Returns:
+    bool: True if meeting SLO, False otherwise
+    """</span>
+    <span class="hljs-keyword">return</span> current_compliance &gt;= slo_target
+</div></code></pre>
+<h2 id="2-service-level-indicators-sli">2. Service Level Indicators (<a href="https://www.sumologic.com/glossary/sli-service-level-indicator/">SLI</a>)</h2>
+<h3 id="definition">Definition</h3>
+<p>SLIs are the actual measurements of service behavior that you use to determine if you're meeting SLOs.</p>
+<h3 id="implementation-steps">Implementation Steps</h3>
+<ol>
+<li><input type="checkbox" id="checkbox7"><label for="checkbox7">Choose what to measure:</label>
+<ul>
+<li>Request latency</li>
+<li>Error rate</li>
+<li>System throughput</li>
+<li>Availability</li>
+</ul>
+</li>
+<li><input type="checkbox" id="checkbox8"><label for="checkbox8">Define measurement points</label></li>
+<li><input type="checkbox" id="checkbox9"><label for="checkbox9">Set up monitoring</label></li>
+<li><input type="checkbox" id="checkbox10"><label for="checkbox10">Implement collection methods</label></li>
+<li><input type="checkbox" id="checkbox11"><label for="checkbox11">Create dashboards</label></li>
+<li><input type="checkbox" id="checkbox12"><label for="checkbox12">Set up alerts</label></li>
+</ol>
+<h3 id="common-slis">Common SLIs</h3>
+<ul>
+<li>Availability = successful requests / total requests</li>
+<li>Latency = time to serve request</li>
+<li>Quality = successful executions / total executions</li>
+<li>Freshness = time since last update</li>
+<li>Coverage = percentage of data processed</li>
+</ul>
+<h3 id="calculator">Calculator</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_sli</span><span class="hljs-params">(good_events, total_events, sli_type=<span class="hljs-string">"availability"</span>)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate SLI for different metrics
+    
+    Parameters:
+    good_events (int/float): Number of good events or measurements
+    total_events (int/float): Total number of events
+    sli_type (str): Type of SLI (availability, latency, quality)
+    
+    Returns:
+    float: SLI value
+    """</span>
+    <span class="hljs-keyword">if</span> total_events == <span class="hljs-number">0</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0.0</span>
+        
+    sli = (good_events / total_events) * <span class="hljs-number">100</span>
+    
+    <span class="hljs-comment"># Add specific handling for different SLI types</span>
+    <span class="hljs-keyword">if</span> sli_type == <span class="hljs-string">"latency"</span>:
+        <span class="hljs-comment"># For latency, we might want to use percentiles instead</span>
+        sli = calculate_percentile(good_events, <span class="hljs-number">95</span>)  <span class="hljs-comment"># 95th percentile</span>
+        
+    <span class="hljs-keyword">return</span> round(sli, <span class="hljs-number">3</span>)
+</div></code></pre>
+<h2 id="3-error-budget">3. Error Budget</h2>
+<h3 id="definition">Definition</h3>
+<p>The error budget is the allowed threshold for errors or unavailability within your <a href="https://sre.google/sre-book/service-level-objectives/">SLO</a> period.</p>
+<h3 id="implementation-steps">Implementation Steps</h3>
+<ol>
+<li><input type="checkbox" id="checkbox13"><label for="checkbox13">Define SLO target</label></li>
+<li><input type="checkbox" id="checkbox14"><label for="checkbox14">Calculate available error budget</label></li>
+<li><input type="checkbox" id="checkbox15"><label for="checkbox15">Set up tracking</label></li>
+<li><input type="checkbox" id="checkbox16"><label for="checkbox16">Define consumption rules</label></li>
+<li><input type="checkbox" id="checkbox17"><label for="checkbox17">Create alerts for consumption</label></li>
+<li><input type="checkbox" id="checkbox18"><label for="checkbox18">Document policy actions</label></li>
+</ol>
+<h3 id="calculator">Calculator</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_error_budget</span><span class="hljs-params">(slo_target, measurement_period_hours=<span class="hljs-number">720</span>)</span>:</span>  <span class="hljs-comment"># 30 days</span>
+    <span class="hljs-string">"""
+    Calculate error budget for a given SLO target
+    
+    Parameters:
+    slo_target (float): SLO target percentage (e.g., 99.9)
+    measurement_period_hours (int): Hours in measurement period
+    
+    Returns:
+    dict: Error budget in different units
+    """</span>
+    total_minutes = measurement_period_hours * <span class="hljs-number">60</span>
+    allowed_downtime_minutes = total_minutes * ((<span class="hljs-number">100</span> - slo_target) / <span class="hljs-number">100</span>)
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'minutes'</span>: round(allowed_downtime_minutes, <span class="hljs-number">2</span>),
+        <span class="hljs-string">'hours'</span>: round(allowed_downtime_minutes / <span class="hljs-number">60</span>, <span class="hljs-number">2</span>),
+        <span class="hljs-string">'percentage'</span>: round(<span class="hljs-number">100</span> - slo_target, <span class="hljs-number">3</span>)
+    }
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_error_budget_remaining</span><span class="hljs-params">(slo_target, current_availability, 
+                                  measurement_period_hours=<span class="hljs-number">720</span>)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate remaining error budget
+    
+    Parameters:
+    slo_target (float): SLO target percentage
+    current_availability (float): Current availability percentage
+    measurement_period_hours (int): Hours in measurement period
+    
+    Returns:
+    dict: Remaining error budget in different units
+    """</span>
+    total_budget = calculate_error_budget(slo_target, measurement_period_hours)
+    consumed_minutes = measurement_period_hours * <span class="hljs-number">60</span> * \
+                      ((slo_target - current_availability) / <span class="hljs-number">100</span>)
+    
+    remaining_minutes = total_budget[<span class="hljs-string">'minutes'</span>] - consumed_minutes
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'minutes'</span>: round(remaining_minutes, <span class="hljs-number">2</span>),
+        <span class="hljs-string">'hours'</span>: round(remaining_minutes / <span class="hljs-number">60</span>, <span class="hljs-number">2</span>),
+        <span class="hljs-string">'percentage'</span>: round((remaining_minutes / (measurement_period_hours * <span class="hljs-number">60</span>)) * <span class="hljs-number">100</span>, <span class="hljs-number">3</span>)
+    }
+</div></code></pre>
+<h2 id="4-mean-time-to-recovery-mttr">4. Mean Time To Recovery (<a href="https://www.blameless.com/blog/mttr">MTTR</a>)</h2>
+<h3 id="definition">Definition</h3>
+<p><a href="https://www.blameless.com/blog/mttr">MTTR</a> measures the average time taken to recover from a failure.</p>
+<h3 id="implementation-steps">Implementation Steps</h3>
+<ol>
+<li><input type="checkbox" id="checkbox19"><label for="checkbox19">Define what constitutes an incident</label></li>
+<li><input type="checkbox" id="checkbox20"><label for="checkbox20">Define start and end points of recovery</label></li>
+<li><input type="checkbox" id="checkbox21"><label for="checkbox21">Set up incident tracking</label></li>
+<li><input type="checkbox" id="checkbox22"><label for="checkbox22">Implement measurement tools</label></li>
+<li><input type="checkbox" id="checkbox23"><label for="checkbox23">Create recovery time dashboards</label></li>
+<li><input type="checkbox" id="checkbox24"><label for="checkbox24">Set targets for improvement</label></li>
+</ol>
+<h3 id="calculator">Calculator</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_mttr</span><span class="hljs-params">(downtimes)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate Mean Time To Recovery
+    
+    Parameters:
+    downtimes (list): List of downtime durations in minutes
+    
+    Returns:
+    float: MTTR in minutes
+    """</span>
+    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> downtimes:
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0.0</span>
+    
+    mttr = sum(downtimes) / len(downtimes)
+    <span class="hljs-keyword">return</span> round(mttr, <span class="hljs-number">2</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">analyze_mttr_trends</span><span class="hljs-params">(monthly_downtimes)</span>:</span>
+    <span class="hljs-string">"""
+    Analyze MTTR trends over time
+    
+    Parameters:
+    monthly_downtimes (dict): Dictionary of month: [downtimes]
+    
+    Returns:
+    dict: Monthly MTTR values and trend analysis
+    """</span>
+    monthly_mttrs = {}
+    <span class="hljs-keyword">for</span> month, downtimes <span class="hljs-keyword">in</span> monthly_downtimes.items():
+        monthly_mttrs[month] = calculate_mttr(downtimes)
+    
+    trend = <span class="hljs-string">'improving'</span> <span class="hljs-keyword">if</span> list(monthly_mttrs.values())[<span class="hljs-number">-1</span>] &lt; list(monthly_mttrs.values())[<span class="hljs-number">0</span>] <span class="hljs-keyword">else</span> <span class="hljs-string">'degrading'</span>
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'monthly_values'</span>: monthly_mttrs,
+        <span class="hljs-string">'trend'</span>: trend,
+        <span class="hljs-string">'average'</span>: round(sum(monthly_mttrs.values()) / len(monthly_mttrs), <span class="hljs-number">2</span>)
+    }
+</div></code></pre>
+<h2 id="5-mean-time-between-failures-mtbf">5. Mean Time Between Failures (<a href="https://www.blameless.com/blog/mttr">MTBF</a>)</h2>
+<h3 id="definition">Definition</h3>
+<p><a href="https://www.blameless.com/blog/mttr">MTBF</a> measures the average time between system failures.</p>
+<h3 id="implementation-steps">Implementation Steps</h3>
+<ol>
+<li><input type="checkbox" id="checkbox25"><label for="checkbox25">Define what constitutes a failure</label></li>
+<li><input type="checkbox" id="checkbox26"><label for="checkbox26">Set up failure detection</label></li>
+<li><input type="checkbox" id="checkbox27"><label for="checkbox27">Implement tracking system</label></li>
+<li><input type="checkbox" id="checkbox28"><label for="checkbox28">Create measurement periods</label></li>
+<li><input type="checkbox" id="checkbox29"><label for="checkbox29">Set up trending</label></li>
+<li><input type="checkbox" id="checkbox30"><label for="checkbox30">Define improvement targets</label></li>
+</ol>
+<h3 id="calculator">Calculator</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_mtbf</span><span class="hljs-params">(total_time, number_of_failures)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate Mean Time Between Failures
+    
+    Parameters:
+    total_time (float): Total operational time in hours
+    number_of_failures (int): Number of failures in that period
+    
+    Returns:
+    float: MTBF in hours
+    """</span>
+    <span class="hljs-keyword">if</span> number_of_failures == <span class="hljs-number">0</span>:
+        <span class="hljs-keyword">return</span> total_time
+    
+    mtbf = total_time / number_of_failures
+    <span class="hljs-keyword">return</span> round(mtbf, <span class="hljs-number">2</span>)
+
+<span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_reliability</span><span class="hljs-params">(mtbf, mttr)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate system reliability using MTBF and MTTR
+    
+    Parameters:
+    mtbf (float): Mean Time Between Failures in hours
+    mttr (float): Mean Time To Recovery in hours
+    
+    Returns:
+    float: Reliability as a percentage
+    """</span>
+    reliability = (mtbf / (mtbf + mttr)) * <span class="hljs-number">100</span>
+    <span class="hljs-keyword">return</span> round(reliability, <span class="hljs-number">3</span>)
+</div></code></pre>
+<h2 id="6-error-budget-policy">6. Error Budget Policy</h2>
+<h3 id="definition">Definition</h3>
+<p>A policy that defines what actions to take when error budget is consumed.</p>
+<h3 id="implementation-steps">Implementation Steps</h3>
+<ol>
+<li><input type="checkbox" id="checkbox31"><label for="checkbox31">Define stakeholders</label></li>
+<li><input type="checkbox" id="checkbox32"><label for="checkbox32">Set consumption thresholds</label></li>
+<li><input type="checkbox" id="checkbox33"><label for="checkbox33">Define actions at each threshold</label></li>
+<li><input type="checkbox" id="checkbox34"><label for="checkbox34">Create escalation paths</label></li>
+<li><input type="checkbox" id="checkbox35"><label for="checkbox35">Document consequences</label></li>
+<li><input type="checkbox" id="checkbox36"><label for="checkbox36">Get agreement from all parties</label></li>
+<li><input type="checkbox" id="checkbox37"><label for="checkbox37">Set review periods</label></li>
+</ol>
+<h3 id="policy-template-structure">Policy Template Structure</h3>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ErrorBudgetPolicy</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self, slo_target, measurement_period_days=<span class="hljs-number">30</span>)</span>:</span>
+        self.slo_target = slo_target
+        self.measurement_period = measurement_period_days
+        self.thresholds = {
+            <span class="hljs-string">'green'</span>: <span class="hljs-number">100</span>,
+            <span class="hljs-string">'yellow'</span>: <span class="hljs-number">75</span>,
+            <span class="hljs-string">'orange'</span>: <span class="hljs-number">50</span>,
+            <span class="hljs-string">'red'</span>: <span class="hljs-number">25</span>
+        }
+        
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">get_policy_actions</span><span class="hljs-params">(self, error_budget_remaining)</span>:</span>
+        <span class="hljs-string">"""
+        Get policy actions based on remaining error budget
+        
+        Parameters:
+        error_budget_remaining (float): Percentage of error budget remaining
+        
+        Returns:
+        dict: Required actions and restrictions
+        """</span>
+        actions = {
+            <span class="hljs-string">'deployment_allowed'</span>: <span class="hljs-literal">True</span>,
+            <span class="hljs-string">'required_reviews'</span>: [],
+            <span class="hljs-string">'restrictions'</span>: [],
+            <span class="hljs-string">'notifications'</span>: []
+        }
+        
+        <span class="hljs-keyword">if</span> error_budget_remaining &lt;= self.thresholds[<span class="hljs-string">'red'</span>]:
+            actions[<span class="hljs-string">'deployment_allowed'</span>] = <span class="hljs-literal">False</span>
+            actions[<span class="hljs-string">'required_reviews'</span>].append(<span class="hljs-string">'Executive Review'</span>)
+            actions[<span class="hljs-string">'restrictions'</span>].append(<span class="hljs-string">'Feature Freeze'</span>)
+            actions[<span class="hljs-string">'notifications'</span>].append(<span class="hljs-string">'Executive Team'</span>)
+            
+        <span class="hljs-keyword">elif</span> error_budget_remaining &lt;= self.thresholds[<span class="hljs-string">'orange'</span>]:
+            actions[<span class="hljs-string">'required_reviews'</span>].append(<span class="hljs-string">'SRE Review'</span>)
+            actions[<span class="hljs-string">'restrictions'</span>].append(<span class="hljs-string">'Increased Testing Required'</span>)
+            actions[<span class="hljs-string">'notifications'</span>].append(<span class="hljs-string">'Engineering Leadership'</span>)
+            
+        <span class="hljs-keyword">elif</span> error_budget_remaining &lt;= self.thresholds[<span class="hljs-string">'yellow'</span>]:
+            actions[<span class="hljs-string">'required_reviews'</span>].append(<span class="hljs-string">'Team Lead Review'</span>)
+            actions[<span class="hljs-string">'notifications'</span>].append(<span class="hljs-string">'Team Lead'</span>)
+            
+        <span class="hljs-keyword">return</span> actions
+</div></code></pre>
+<h3 id="example-policy-implementation">Example Policy Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">implement_error_budget_policy</span><span class="hljs-params">(current_availability, slo_target)</span>:</span>
+    <span class="hljs-string">"""
+    Implement error budget policy
+    
+    Parameters:
+    current_availability (float): Current service availability
+    slo_target (float): SLO target
+    
+    Returns:
+    dict: Policy actions to take
+    """</span>
+    policy = ErrorBudgetPolicy(slo_target)
+    
+    <span class="hljs-comment"># Calculate remaining error budget</span>
+    budget_remaining = calculate_error_budget_remaining(
+        slo_target, 
+        current_availability
+    )
+    
+    <span class="hljs-comment"># Get policy actions</span>
+    actions = policy.get_policy_actions(
+        budget_remaining[<span class="hljs-string">'percentage'</span>]
+    )
+    
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'budget_remaining'</span>: budget_remaining,
+        <span class="hljs-string">'policy_actions'</span>: actions,
+        <span class="hljs-string">'status'</span>: get_status_level(budget_remaining[<span class="hljs-string">'percentage'</span>])
+    }
+</div></code></pre>
+<hr>
+<br>
+<h2 id="slo-component-relationship"><a href="https://sre.google/sre-book/service-level-objectives/">SLO</a> Component Relationship</h2>
+<img src="//alertstack.io/images/slocomponentrelationship.webp"/>
+<pre class="hide" ><code class="hide language-mermaid"><div class="hide mermaid">flowchart TB
+    SLI[SLI - Actual Measurements]:::measurementNode --> SLO[SLO - Target Objectives]:::objectiveNode
+    SLO --> EB[Error Budget]:::budgetNode
+    EB --> EBP[Error Budget Policy]:::policyNode
+    
+    subgraph Reliability Metrics
+    MTBF[Mean Time Between Failures]:::timeMetricNode
+    MTTR[Mean Time To Recovery]:::timeMetricNode
+    end
+    
+    MTBF --> REL[System Reliability]:::reliabilityNode
+    MTTR --> REL
+    
+    subgraph Error Budget Management
+    EB --> EBC[Error Budget Consumption]:::consumptionNode
+    EBC --> EPA[Policy Actions]:::actionNode
+    EPA --> FR[Feature Releases]:::outputNode
+    EPA --> DR[Deployment Restrictions]:::outputNode
+    end
+
+    %% Node Styling
+    classDef measurementNode fill:#4CAF50,stroke:#2E7D32,color:white
+    classDef objectiveNode fill:#2196F3,stroke:#1976D2,color:white
+    classDef budgetNode fill:#FF9800,stroke:#F57C00,color:white
+    classDef policyNode fill:#9C27B0,stroke:#7B1FA2,color:white
+    classDef timeMetricNode fill:#00BCD4,stroke:#0097A7,color:white
+    classDef reliabilityNode fill:#3F51B5,stroke:#303F9F,color:white
+    classDef consumptionNode fill:#FF5722,stroke:#E64A19,color:white
+    classDef actionNode fill:#795548,stroke:#5D4037,color:white
+    classDef outputNode fill:#607D8B,stroke:#455A64,color:white
+
+    %% Subgraph Styling
+    classDef subgraphStyle fill:#f5f5f5,stroke:#cccccc,stroke-width:2px
+    class ReliabilityMetrics,ErrorBudgetManagement subgraphStyle
+</div></code></pre>
+<br>
+<h2 id="state-change-diagram">State Change Diagram</h2>
+<img src="//alertstack.io/images/statechange1.webp"/>
+<img src="//alertstack.io/images/statechange2.webp"/>
+
+<pre class="hide"><code class="hide language-mermaid"><div class="hide mermaid">stateDiagram-v2
+    [*] --> Green
+    Green --> Yellow: 25% Consumed
+    Yellow --> Orange: 50% Consumed
+    Orange --> Red: 75% Consumed
+    Red --> Green: Reset at Window End
+    
+    state Green {
+        [*] --> FullSpeed
+        state "Full Speed" as FullSpeed
+        state "Normal Deployments" as Deployments
+        state "Standard Reviews" as Reviews
+    }
+    
+    state Yellow {
+        [*] --> Caution
+        state "Caution" as Caution
+        state "Team Lead Review" as LeadReview
+        state "Increased Monitoring" as Monitoring
+    }
+    
+    state Orange {
+        [*] --> Warning
+        state "Warning" as Warning
+        state "SRE Review Required" as SREReview
+        state "Additional Testing" as Testing
+    }
+    
+    state Red {
+        [*] --> Stop
+        state "Stop" as Stop
+        state "Feature Freeze" as Freeze
+        state "Executive Review" as ExecReview
+        state "Crisis Management" as Crisis
+    }
+
+    classDef green fill:#4CAF50,stroke:#2E7D32,color:white
+    classDef yellow fill:#FFC107,stroke:#FFA000,color:black
+    classDef orange fill:#FF9800,stroke:#F57C00,color:black
+    classDef red fill:#F44336,stroke:#D32F2F,color:white
+    #classDef white fill:#FFFFFF,stroke:#000000,color:black
+
+    class Green green
+    class Yellow yellow
+    class Orange orange
+    class Red red
+    class White white
+
+</div></code></pre>
+<br>  
+<hr>  
+<br>  
+<h1 id="sre-observability-frameworks-guide">SRE Observability Frameworks Guide</h1>
+<p>THere are many frameworks to choose from. Each framework serves different but complementary purposes. Common examples are:</p>
+<p><a href="https://www.splunk.com/en_us/blog/learn/red-monitoring.html">RED</a>: Service behavior<br>
+<a href="https://sre.google/sre-book/service-level-objectives/">USE</a>: Resource utilization<br>
+<a href="https://sre.google/sre-book/service-level-objectives/">DUNE</a>: Distributed systems<br>
+<a href="https://sre.google/sre-book/service-level-objectives/">DURESS</a>: Overall service health<br>
+<a href="https://sre.google/sre-book/service-level-objectives/">CELTE</a>: Customer experience</p>
+<h2 id="1-red-method">1. <code>RED</code> Method</h2>
+<h3 id="definition">Definition</h3>
+<p><a href="https://www.splunk.com/en_us/blog/learn/red-monitoring.html">RED</a> is a microservices-oriented monitoring framework focused on core service behavior (mentioned in <a href="https://sre.google/sre-book/monitoring-distributed-systems/#xref_monitoring_golden-signals">4 Signals</a>).</p>
+<h3 id="components">Components</h3>
+<ul>
+<li><strong>Rate (R)</strong>: Number of requests per second</li>
+<li><strong>Errors (E)</strong>: Number of failed requests per second</li>
+<li><strong>Duration (D)</strong>: Distribution of request latencies</li>
+</ul>
+<h3 id="example-implementation-steps">Example Implementation Steps</h3>
+<ol>
+<li>
+<p><input type="checkbox" id="checkbox38"><label for="checkbox38">Set up request rate monitoring</label></p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_request_rate</span><span class="hljs-params">(total_requests, time_period_seconds)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate requests per second
+    """</span>
+    <span class="hljs-keyword">return</span> round(total_requests / time_period_seconds, <span class="hljs-number">2</span>)
+</div></code></pre>
+</li>
+<li>
+<p><input type="checkbox" id="checkbox39"><label for="checkbox39">Implement error tracking</label></p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_error_rate</span><span class="hljs-params">(total_requests, failed_requests)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate error rate percentage
+    """</span>
+    <span class="hljs-keyword">if</span> total_requests == <span class="hljs-number">0</span>:
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>
+    <span class="hljs-keyword">return</span> round((failed_requests / total_requests) * <span class="hljs-number">100</span>, <span class="hljs-number">2</span>)
+</div></code></pre>
+</li>
+<li>
+<p><input type="checkbox" id="checkbox40"><label for="checkbox40">Measure request duration</label></p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">analyze_latency_distribution</span><span class="hljs-params">(durations)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate latency percentiles
+    """</span>
+    <span class="hljs-keyword">return</span> {
+        <span class="hljs-string">'p50'</span>: numpy.percentile(durations, <span class="hljs-number">50</span>),
+        <span class="hljs-string">'p90'</span>: numpy.percentile(durations, <span class="hljs-number">90</span>),
+        <span class="hljs-string">'p99'</span>: numpy.percentile(durations, <span class="hljs-number">99</span>)
+    }
+</div></code></pre>
+</li>
+</ol>
+<h2 id="2-use-method">2. <code>USE</code> Method</h2>
+<h3 id="definition">Definition</h3>
+<p><a href="https://sre.google/sre-book/service-level-objectives/">USE</a> focuses on performance and resource utilization analysis.</p>
+<h3 id="components">Components</h3>
+<ul>
+<li><strong>Utilization (U)</strong>: Percentage of time resource is busy</li>
+<li><strong>Saturation (S)</strong>: Degree to which resource has extra work</li>
+<li><strong>Errors (E)</strong>: Count of error events</li>
+</ul>
+<h3 id="implementation-steps">Implementation Steps</h3>
+<ol>
+<li>
+<p><input type="checkbox" id="checkbox41"><label for="checkbox41">Monitor resource utilization</label></p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_utilization</span><span class="hljs-params">(busy_time, total_time)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate resource utilization percentage
+    """</span>
+    <span class="hljs-keyword">return</span> round((busy_time / total_time) * <span class="hljs-number">100</span>, <span class="hljs-number">2</span>)
+</div></code></pre>
+</li>
+<li>
+<p><input type="checkbox" id="checkbox42"><label for="checkbox42">Track saturation</label></p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_saturation</span><span class="hljs-params">(queue_length, max_queue)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate resource saturation level
+    """</span>
+    <span class="hljs-keyword">return</span> round((queue_length / max_queue) * <span class="hljs-number">100</span>, <span class="hljs-number">2</span>)
+</div></code></pre>
+</li>
+<li>
+<p><input type="checkbox" id="checkbox43"><label for="checkbox43">Error counting</label></p>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">track_resource_errors</span><span class="hljs-params">(error_types)</span>:</span>
+    <span class="hljs-string">"""
+    Track errors by type and frequency
+    """</span>
+    <span class="hljs-keyword">return</span> {
+        error_type: count 
+        <span class="hljs-keyword">for</span> error_type, count <span class="hljs-keyword">in</span> Counter(error_types).items()
+    }
+</div></code></pre>
+</li>
+</ol>
+<h2 id="3-dune-method">3. <code>DUNE</code> Method</h2>
+<h3 id="definition">Definition</h3>
+<p><a href="https://sre.google/sre-book/service-level-objectives/">DUNE</a> is focused on distributed systems monitoring.</p>
+<h3 id="components">Components</h3>
+<ul>
+<li><strong>Delay (D)</strong>: Time taken for operations</li>
+<li><strong>Utilization (U)</strong>: Resource usage levels</li>
+<li><strong>Noise (N)</strong>: System interference/crosstalk</li>
+<li><strong>Errors (E)</strong>: Failure counts and types</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DUNEMetrics</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_delay</span><span class="hljs-params">(self, operation_times)</span>:</span>
+        <span class="hljs-string">"""Calculate operation delays"""</span>
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">'avg'</span>: statistics.mean(operation_times),
+            <span class="hljs-string">'max'</span>: max(operation_times),
+            <span class="hljs-string">'min'</span>: min(operation_times)
+        }
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">measure_noise</span><span class="hljs-params">(self, baseline, current)</span>:</span>
+        <span class="hljs-string">"""Measure system interference"""</span>
+        <span class="hljs-keyword">return</span> {
+            <span class="hljs-string">'deviation'</span>: abs(current - baseline),
+            <span class="hljs-string">'percentage'</span>: (abs(current - baseline) / baseline) * <span class="hljs-number">100</span>
+        }
+</div></code></pre>
+<h2 id="4-duress-method">4. <code>DURESS</code> Method</h2>
+<h3 id="definition">Definition</h3>
+<p><a href="https://sre.google/sre-book/service-level-objectives/">DURESS</a> is focused on overall service health and how it relates to user experience.</p>
+<h3 id="components">Components</h3>
+<ul>
+<li><strong>Downstream (D)</strong>: Dependency health</li>
+<li><strong>Uptime (U)</strong>: Service availability</li>
+<li><strong>Resource (R)</strong>: Resource usage</li>
+<li><strong>Error (E)</strong>: Error patterns</li>
+<li><strong>Saturation (S)</strong>: System load</li>
+<li><strong>Staleness (S)</strong>: Data freshness</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DURESSMonitor</span>:</span>
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">check_dependencies</span><span class="hljs-params">(self, dependencies)</span>:</span>
+        <span class="hljs-keyword">return</span> {
+            dep: {
+                <span class="hljs-string">'status'</span>: status,
+                <span class="hljs-string">'latency'</span>: latency,
+                <span class="hljs-string">'errors'</span>: error_count
+            }
+            <span class="hljs-keyword">for</span> dep, (status, latency, error_count) <span class="hljs-keyword">in</span> dependencies.items()
+        }
+    
+    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">measure_staleness</span><span class="hljs-params">(self, last_update_time)</span>:</span>
+        <span class="hljs-string">"""Calculate data staleness"""</span>
+        current_time = time.time()
+        <span class="hljs-keyword">return</span> current_time - last_update_time
+</div></code></pre>
+<h2 id="5-celte-method">5. <code>CELTE</code> Method</h2>
+<h3 id="definition">Definition</h3>
+<p><a href="https://sre.google/sre-book/service-level-objectives/">CELTE</a> focuses more on customer experience and business facing metrics.</p>
+<h3 id="components">Components</h3>
+<ul>
+<li><strong>Customer (C)</strong>: User experience metrics</li>
+<li><strong>Error (E)</strong>: Service errors</li>
+<li><strong>Latency (L)</strong>: Response times</li>
+<li><strong>Traffic (T)</strong>: Request volumes</li>
+<li><strong>Exhaustion (E)</strong>: Resource limits</li>
+</ul>
+<h3 id="implementation">Implementation</h3>
+<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">calculate_celte_score</span><span class="hljs-params">(metrics)</span>:</span>
+    <span class="hljs-string">"""
+    Calculate overall service health score
+    """</span>
+    weights = {
+        <span class="hljs-string">'customer_satisfaction'</span>: <span class="hljs-number">0.3</span>,
+        <span class="hljs-string">'error_rate'</span>: <span class="hljs-number">0.2</span>,
+        <span class="hljs-string">'latency_score'</span>: <span class="hljs-number">0.2</span>,
+        <span class="hljs-string">'traffic_health'</span>: <span class="hljs-number">0.15</span>,
+        <span class="hljs-string">'resource_health'</span>: <span class="hljs-number">0.15</span>
+    }
+    
+    <span class="hljs-keyword">return</span> sum(metric * weights[name] 
+              <span class="hljs-keyword">for</span> name, metric <span class="hljs-keyword">in</span> metrics.items())
+</div></code></pre>
+<h2 id="information-flows-by-framework">Information flows by framework</h2>
+<img src="//alertstack.io/images/informationflowsbyframework.webp"/>
+
+<pre class="hide"><code class="hide language-mermaid"><div class="hide mermaid">%%{init: { 'theme': 'base', 'themeVariables': {
+    'actorBkg': '#4CAF50',
+    'actorTextColor': '#fff',
+    'actorBorder': '#2E7D32',
+    'actorLineColor': '#2E7D32',
+    
+    'participantBkg': '#2196F3',
+    'participantTextColor': '#fff',
+    'participantBorder': '#1976D2',
+    
+    'messageFontSize': '16px',
+    'messageFontFamily': 'arial',
+    'messageTextColor': '#333',
+    
+    'noteBkgColor': '#fff3bf',
+    'noteTextColor': '#333',
+    'noteBorderColor': '#FFB300',
+    
+    'loopTextColor': '#666',
+    'loopBorderColor': '#FF9800',
+    'loopBkgColor': '#FFF8E1',
+    
+    'sequenceNumberColor': '#fff',
+    'sequenceNumberFontSize': '14px',
+    
+    'labelBoxBkgColor': '#F1F8E9',
+    'labelBoxBorderColor': '#7CB342',
+    'labelTextColor': '#333',
+    
+    'signalColor': '#2196F3',
+    'signalTextColor': '#333',
+    
+    'activationBorderColor': '#E64A19',
+    'activationBkgColor': '#FBE9E7',
+    
+    'mainBkg': '#FAFAFA'
+}}}%%
+
+sequenceDiagram
+    actor Service
+    participant Collector
+    participant Storage
+    participant Alert
+    participant Dashboard
+    
+    activate Service
+    Service->>+Collector: Send RED metrics
+    Note over Service,Collector: Performance metrics
+    Service->>+Collector: Send USE metrics
+    Note over Service,Collector: Resource metrics
+    Service->>+Collector: Send DUNE metrics
+    Note over Service,Collector: Distributed metrics
+    Service->>+Collector: Send DURESS metrics
+    Note over Service,Collector: System health metrics
+    deactivate Service
+    
+    Collector->>+Storage: Process & Store
+    deactivate Collector
+    
+    loop Every minute
+        Storage->>+Alert: Check thresholds
+        Alert-->>-Dashboard: Update status
+    end
+    
+    Dashboard->>+Storage: Query metrics
+    Storage-->>-Dashboard: Return data
+</div></code></pre>
+<br>
+<h2 id="relationship-between-frameworks">Relationship between frameworks</h2>
+<img src="//alertstack.io/images/relationshipbetweenframeworks.webp"/>
+
+<pre class="hide" ><code class="hide language-mermaid"><div class="hide mermaid">flowchart TB
+    subgraph Primary Methods
+        direction LR
+        subgraph RED Framework
+            direction TB
+            R[Rate]:::rateMetric --> RED:::redMethod
+            E1[Errors]:::errorMetric --> RED
+            D1[Duration]:::durationMetric --> RED
+        end
+        
+        subgraph USE Method
+            direction TB
+            U1[Utilization]:::utilizationMetric --> USE:::useMethod
+            S1[Saturation]:::saturationMetric --> USE
+            E2[Errors]:::errorMetric --> USE
+        end
+        
+        subgraph DUNE Method
+            direction TB
+            D2[Delay]:::durationMetric --> DUNE:::duneMethod
+            U2[Utilization]:::utilizationMetric --> DUNE
+            N[Noise]:::noiseMetric --> DUNE
+            E3[Errors]:::errorMetric --> DUNE
+        end
+    end
+    
+    RED --> ServiceHealth[Service Health]:::healthMetric
+    USE --> SystemHealth[System Health]:::healthMetric
+    DUNE --> DistributedHealth[Distributed Systems Health]:::healthMetric
+    
+    ServiceHealth --> Aggregation[Health Metrics Aggregation]:::aggregationNode
+    SystemHealth --> Aggregation
+    DistributedHealth --> Aggregation
+    
+    Aggregation --> DURESS
+    
+    subgraph DURESS System
+        direction LR
+        D3[Downstream]:::downstreamMetric & U3[Uptime]:::uptimeMetric & R1[Resources]:::resourceMetric --> DURESS:::duressMethod
+        E4[Errors]:::errorMetric & S2[Saturation]:::saturationMetric & S3[Staleness]:::stalenessMetric --> DURESS
+    end
+    
+    DURESS --> OverallHealth[Overall Health]:::healthMetric
+    OverallHealth --> MonitoringStrategy[Monitoring Strategy]:::strategyNode
+
+    classDef rateMetric fill:#ff9999,stroke:#ff0000,color:#000
+    classDef errorMetric fill:#ffcccc,stroke:#ff0000,color:#000
+    classDef durationMetric fill:#99ff99,stroke:#00ff00,color:#000
+    classDef utilizationMetric fill:#9999ff,stroke:#0000ff,color:#000
+    classDef saturationMetric fill:#ffff99,stroke:#ffff00,color:#000
+    classDef noiseMetric fill:#ff99ff,stroke:#ff00ff,color:#000
+    classDef downstreamMetric fill:#99ffff,stroke:#00ffff,color:#000
+    classDef uptimeMetric fill:#ffcc99,stroke:#ff9900,color:#000
+    classDef resourceMetric fill:#99ccff,stroke:#0099ff,color:#000
+    classDef stalenessMetric fill:#cc99ff,stroke:#9900ff,color:#000
+    
+    classDef redMethod fill:#ffe6e6,stroke:#ff0000,color:#000
+    classDef useMethod fill:#e6e6ff,stroke:#0000ff,color:#000
+    classDef duneMethod fill:#e6ffe6,stroke:#00ff00,color:#000
+    classDef duressMethod fill:#ffe6ff,stroke:#ff00ff,color:#000
+    
+    classDef healthMetric fill:#e6ffee,stroke:#00ff00,color:#000
+    classDef aggregationNode fill:#f0f0f0,stroke:#666666,color:#000
+    classDef strategyNode fill:#e6f3ff,stroke:#0066cc,color:#000
+</div></code></pre>
+
+</body>
+</html>
